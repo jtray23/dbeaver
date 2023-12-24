@@ -99,7 +99,7 @@ public class AthenaMetaModel extends GenericMetaModel implements DBCQueryTransfo
     private String getObjectDDL(DBRProgressMonitor monitor, GenericTableBase sourceObject, Map<String, Object> options, String ddlStatement) throws DBException {
         try (JDBCSession session = DBUtils.openMetaSession(monitor, sourceObject, "Read Athena object DDL")) {
             try (JDBCPreparedStatement dbStat = session.prepareStatement(
-                ddlStatement + " " + sourceObject.getFullyQualifiedName(DBPEvaluationContext.DDL))) {
+                ddlStatement + " `" + sourceObject.getFullyQualifiedName(DBPEvaluationContext.DDL).replace(".", "`.`") + "`")) {
                 try (JDBCResultSet dbResult = dbStat.executeQuery()) {
                     StringBuilder sql = new StringBuilder();
                     while (dbResult.nextRow()) {
